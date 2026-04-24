@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ejercicio 3 - Nombre de Usuario</title>
+  <title>Ejercicio 4 - ¿Puede Votar?</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #fdf0ff;
+      background: #fff8f0;
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -25,8 +25,8 @@
     }
     .badge {
       display: inline-block;
-      background: #eeedfe;
-      color: #534ab7;
+      background: #faeeda;
+      color: #854f0b;
       font-size: 11px;
       font-weight: 600;
       padding: 3px 10px;
@@ -35,84 +35,79 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
     }
-    h1 { font-size: 1.3rem; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; }
+    h1 { font-size: 1.3rem; font-weight: 600; color: #2e1a00; margin-bottom: 6px; }
     p { font-size: 13px; color: #777; margin-bottom: 1.5rem; }
     label { display: block; font-size: 13px; font-weight: 500; color: #444; margin-bottom: 6px; margin-top: 12px; }
     input {
       width: 100%; padding: 10px 14px;
       font-size: 15px; border: 1.5px solid #e0e0e0;
       border-radius: 10px; outline: none;
-      transition: border-color 0.2s; color: #1a1a2e;
+      transition: border-color 0.2s; color: #2e1a00;
     }
-    input:focus { border-color: #7f77dd; }
+    input:focus { border-color: #ef9f27; }
     button {
       margin-top: 16px; width: 100%;
       padding: 11px; font-size: 15px; font-weight: 600;
-      background: #534ab7; color: #fff;
+      background: #ba7517; color: #fff;
       border: none; border-radius: 10px;
       cursor: pointer; transition: background 0.2s, transform 0.1s;
     }
-    button:hover { background: #6a60d4; }
+    button:hover { background: #d4891e; }
     button:active { transform: scale(0.98); }
     .result {
       margin-top: 16px; padding: 16px;
-      background: #f5f4ff; border-left: 4px solid #7f77dd;
-      border-radius: 8px; display: none;
+      border-radius: 10px; display: none;
+      font-size: 16px; font-weight: 600;
+      text-align: center; line-height: 1.5;
     }
-    .avatar {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: #534ab7; color: #fff;
-      font-size: 20px; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 12px;
-    }
-    .row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 14px; }
-    .row span:first-child { color: #888; }
-    .row span:last-child { font-weight: 600; color: #534ab7; font-family: monospace; font-size: 15px; }
+    .puede { background: #eaf3de; color: #3b6d11; border: 1.5px solid #97c459; }
+    .no-puede { background: #fcebeb; color: #a32d2d; border: 1.5px solid #f09595; }
+    .icono { font-size: 28px; margin-bottom: 6px; display: block; }
   </style>
 </head>
 <body>
   <div class="card">
-    <span class="badge">Ejercicio 3</span>
-    <h1>Nombre de Usuario</h1>
-    <p>Ingresa tu nombre y apellido para generar tu usuario e iniciales.</p>
+    <span class="badge">Ejercicio 4</span>
+    <h1>¿Puede Votar?</h1>
+    <p>Verifica si una persona tiene la edad mínima para votar (18 años).</p>
     <label for="nombre">Nombre</label>
-    <input type="text" id="nombre" placeholder="Ej: Juan" />
-    <label for="apellido">Apellido</label>
-    <input type="text" id="apellido" placeholder="Ej: Lopez" />
-    <button onclick="generar()">Generar</button>
+    <input type="text" id="nombre" placeholder="Ej: María" />
+    <label for="edad">Edad</label>
+    <input type="number" id="edad" placeholder="Ej: 25" min="0" />
+    <button onclick="verificar()">Verificar</button>
     <div class="result" id="resultado">
-      <div class="avatar" id="avatar"></div>
-      <div class="row">
-        <span>Nombre de usuario:</span>
-        <span id="usuario"></span>
-      </div>
-      <div class="row">
-        <span>Iniciales:</span>
-        <span id="iniciales"></span>
-      </div>
+      <span class="icono" id="icono"></span>
+      <div id="texto"></div>
     </div>
   </div>
 
   <script>
-    function generar() {
+    function verificar() {
       const nombre = document.getElementById('nombre').value.trim();
-      const apellido = document.getElementById('apellido').value.trim();
+      const edad = parseInt(document.getElementById('edad').value);
       const res = document.getElementById('resultado');
-      if (!nombre || !apellido) {
-        alert('Por favor ingresa nombre y apellido.');
+      const texto = document.getElementById('texto');
+      const icono = document.getElementById('icono');
+
+      if (!nombre || isNaN(edad) || edad < 0) {
+        alert('Por favor ingresa un nombre y una edad válida.');
         return;
       }
-      const usuario = (nombre + apellido).toLowerCase();
-      const iniciales = nombre[0].toUpperCase() + apellido[0].toUpperCase();
-      document.getElementById('usuario').textContent = usuario;
-      document.getElementById('iniciales').textContent = iniciales;
-      document.getElementById('avatar').textContent = iniciales;
+
       res.style.display = 'block';
+      if (edad >= 18) {
+        res.className = 'result puede';
+        icono.textContent = '✅';
+        texto.textContent = `${nombre} puede votar.`;
+      } else {
+        res.className = 'result no-puede';
+        icono.textContent = '❌';
+        texto.textContent = `${nombre} no puede votar.`;
+      }
     }
 
     document.querySelectorAll('input').forEach(el => {
-      el.addEventListener('keydown', e => { if (e.key === 'Enter') generar(); });
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') verificar(); });
     });
   </script>
 </body>
